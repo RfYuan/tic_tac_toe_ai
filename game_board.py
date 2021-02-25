@@ -7,13 +7,6 @@ class TicTacToeCell(enum.Enum):
     X = 2
 
 
-class GameBoard:
-    board = []
-
-    def __init__(self, length, width, init_cell_state):
-        board = [x[:] for x in [[init_cell_state] * width] * length]
-
-
 class InvalidMoveError(RuntimeError):
     pass
 

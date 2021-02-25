@@ -16,13 +16,13 @@ def get_current_player(ttt_game):
 def to_matrix(l, n):
     return [l[i:i + n] for i in range(0, len(l), n)]
 
-def print_flattened( falttened):
+def print_flattened(falttened):
     matrix = to_matrix(falttened,3)
     for i in range(3):
         print(''.join([x.name for x in matrix[i]]))
 
 def place_chess(flattened, pos):
-    flattened = current_game_flatten.copy()
+    flattened = flattened.copy()
     flattened[pos] = current_player
     next_game_matrix = to_matrix(flattened, 3)
     game = TicTacToeGameBoard()
