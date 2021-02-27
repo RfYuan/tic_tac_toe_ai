@@ -1,7 +1,7 @@
+import logging
 import sys
 import threading
 import time
-import logging
 
 from tic_tac_toe_util import *
 
@@ -23,8 +23,17 @@ def get_game_tree(game_tree_node: TicTacToeTreeNode):
     t2 = time.time()
     print("score_nodes", t2 - t1)
 
+
+def AI_place_chess(min_max_tree, player):
+    if player == TicTacToeCell.O:
+        next_game_node = find_max_from_tree(min_max_tree)
+    else:
+        next_game_node = find_min_from_tree(min_max_tree)
+    return next_game_node
+
+
 def find_max_from_tree(game_tree_node: TicTacToeTreeNode):
-    assert len(game_tree_node.childrens)>0
+    assert len(game_tree_node.childrens) > 0
     childrens = game_tree_node.childrens
     max_node = childrens[0]
     for i in childrens:
@@ -32,8 +41,9 @@ def find_max_from_tree(game_tree_node: TicTacToeTreeNode):
             max_node = i
     return max_node
 
+
 def find_min_from_tree(game_tree_node: TicTacToeTreeNode):
-    assert len(game_tree_node.childrens)>0
+    assert len(game_tree_node.childrens) > 0
     childrens = game_tree_node.childrens
     min_node = childrens[0]
     for i in childrens:
@@ -41,15 +51,16 @@ def find_min_from_tree(game_tree_node: TicTacToeTreeNode):
             min_node = i
     return min_node
 
-def get_node_from_game_tree(board, gameTreeNode:TicTacToeTreeNode):
-    unviewed =[gameTreeNode]
-    while len(unviewed)>0:
+
+def get_node_from_game_tree(board:TicTacToeGameBoard, gameTreeNode: TicTacToeTreeNode):
+    unviewed = [gameTreeNode]
+    while len(unviewed) > 0:
         current_node = unviewed.pop()
         if current_node.tic_tac_toe_game.board == board:
-            return  current_node
-        unviewed+=current_node.childrens
-    logging.error("could find tree node for "+str(board))
-    return None
+            return current_node
+        unviewed += current_node.childrens
+    logging.error("could find tree node for " + str(board))
+    raise RuntimeError("could find tree node for " + str(board.board))
 
 
 def generate_childrens(game_tree_node: TicTacToeTreeNode):
