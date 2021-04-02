@@ -1,7 +1,7 @@
 import enum
 
 
-class TicTacToeCell(enum.Enum):
+class TicTacToeCell(enum.IntEnum):
     N = 0
     O = 1
     X = 2

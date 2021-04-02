@@ -13,15 +13,35 @@ MIN_MAX_TREE_TTT_GAME_SAVE_FILE = 'tic_tac_toe_game_tree'
 # TicTacToeCell.O would be the first move player and score 1 if win
 # TicTacToeCell.X would be the second move player and score 0 if win
 
+def get_board_and_score_from_game_tree_node(game_tree_node: TicTacToeTreeNode):
+    t0 = time.time()
+    unchecked_node = [game_tree_node]
+    viewed_board = []
+    game_board_collection = []
+    score_collection = []
+    while unchecked_node:
+        current_node = unchecked_node.pop()
+        # print(len(current_node.childrens))
+        if current_node.tic_tac_toe_game.board in viewed_board:
+            continue
+        game_board_collection.append(current_node.tic_tac_toe_game.board)
+        score_collection.append(current_node.score)
+        unchecked_node.extend(current_node.childrens)
+        viewed_board.append(current_node.tic_tac_toe_game.board)
+    print(len(viewed_board))
+    logging.info("time taken to fetch board and score = {}".format(time.time() - t0))
+    return game_board_collection, score_collection
+
+
 def get_game_tree(game_tree_node: TicTacToeTreeNode):
     t0 = time.time()
     generate_childrens(game_tree_node)
     t1 = time.time()
-    print("generated_all_nodes", t1 - t0)
+    logging.info("generated_all_nodes", t1 - t0)
     # tmp_node = game_tree_node.childrens[0]
     scores_tree_node(game_tree_node)
     t2 = time.time()
-    print("score_nodes", t2 - t1)
+    logging.info("score_nodes", t2 - t1)
 
 
 def AI_place_chess(min_max_tree, player):
@@ -52,7 +72,7 @@ def find_min_from_tree(game_tree_node: TicTacToeTreeNode):
     return min_node
 
 
-def get_node_from_game_tree(board:TicTacToeGameBoard, gameTreeNode: TicTacToeTreeNode):
+def get_node_from_game_tree(board: TicTacToeGameBoard, gameTreeNode: TicTacToeTreeNode):
     unviewed = [gameTreeNode]
     while len(unviewed) > 0:
         current_node = unviewed.pop()
@@ -93,7 +113,7 @@ def generate_childrens(game_tree_node: TicTacToeTreeNode):
                     current_considered.childrens.append(new_node)
                     new_node.parent.append(current_considered)
                     unviewed.append(new_node)
-    print(len(seen_nodes))
+    logging.info("{} of nodes been found ".format(len(seen_nodes)))
 
 
 def place_chess(game: TicTacToeGameBoard, pos, current_player):
